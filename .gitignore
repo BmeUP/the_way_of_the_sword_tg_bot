@@ -1,0 +1,5 @@
+.env
+.python-version
+venv
+__pycache__
+compose.local.yml

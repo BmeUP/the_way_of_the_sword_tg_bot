@@ -1,0 +1,6 @@
+services:
+  processing-backend:
+    build:
+      args:
+        PIP_ENVIRONMENT: dev
+        RUNNER: dev
