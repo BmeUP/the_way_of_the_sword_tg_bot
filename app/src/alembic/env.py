@@ -10,6 +10,7 @@ from sqlmodel import SQLModel
 
 from config.settings import settings
 from users.models.orm.user import User  # noqa: F401
+from twots_bot.models.orm.message import Message  # noqa: F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

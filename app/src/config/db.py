@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from typing import AsyncIterator, Annotated
 
 from fastapi import Depends
@@ -17,8 +18,17 @@ AsyncSessionLocal = async_sessionmaker(
     bind=async_engine,
     autoflush=False,
     future=True,
-    class_=AsynSessionSQLModel,
+    class_=AsynSessionSQLModel
 )
+
+
+@asynccontextmanager
+async def get_local_session():
+    try:
+        async with AsyncSessionLocal() as session:
+            yield session
+    except SQLAlchemyError as e:
+        print(e)
 
 
 async def get_session() -> AsyncIterator[async_sessionmaker]:

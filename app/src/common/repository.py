@@ -32,12 +32,11 @@ class BaseRepository(Generic[ModelClass]):
         res = await self.session.scalars(statement=statement)
         return res.one_or_none()
 
-    async def refresh(self):
-        await self.session.refresh(self.data)
-        return self.data
-
     async def persist(self):
         try:
             await self.session.commit()
+            await self.session.refresh(self.data)
+            await self.session.close()
+            return self.data
         except Exception:
             await self.session.rollback()

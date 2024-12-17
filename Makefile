@@ -8,7 +8,11 @@ logsf-backend:
 	cd ci/docker; docker compose logs -f the_way_of_the_sword-backend
 
 logsf-rmq:
-	cd ci/docker; docker compose logs -f the_way_of_the_sword-mq:
+	cd ci/docker; docker compose logs -f the_way_of_the_sword-mq
+
+logsf-scheduler:
+	cd ci/docker; docker compose logs -f the_way_of_the_sword-taskiq-scheduler
+
 
 exec-mq:
 	cd ci/docker; docker compose exec the_way_of_the_sword-mq bash
