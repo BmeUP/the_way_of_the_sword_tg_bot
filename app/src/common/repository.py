@@ -29,8 +29,15 @@ class BaseRepository(Generic[ModelClass]):
         for key, value in kwargs.items():
             statement = statement.where(self.entity.__table__.columns.get(key) == value) # noqa
 
-        res = await self.session.scalars(statement=statement)
+        return await self.session.scalars(statement=statement)
+
+    async def get_one_or_none_by_params(self, **kwargs):
+        res = await self.get_object_by_params(**kwargs)
         return res.one_or_none()
+
+    async def get_all_by_params(self, **kwargs):
+        res = await self.get_object_by_params(**kwargs)
+        return res.all()
 
     async def persist(self):
         try:

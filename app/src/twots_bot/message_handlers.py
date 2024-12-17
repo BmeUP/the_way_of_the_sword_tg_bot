@@ -18,7 +18,7 @@ twots_aiogram_router = Router()
 async def start(message: Message) -> None:
     async with get_local_session() as session:
         user_repo = UserRepository(session=session)
-        user: User | None = await user_repo.get_object_by_params(telegram_user_id=message.from_user.id)
+        user: User | None = await user_repo.get_one_or_none_by_params(telegram_user_id=message.from_user.id)
 
         if not user:
             tg_user_registration = TGUserRegistration(message=message, user_repo=user_repo)
@@ -29,7 +29,7 @@ async def start(message: Message) -> None:
 async def echo(message: Message):
     async with get_local_session() as session:
         user_repo = UserRepository(session=session)
-        user: User = await user_repo.get_object_by_params(telegram_user_id=message.from_user.id)
+        user: User = await user_repo.get_one_or_none_by_params(telegram_user_id=message.from_user.id)
 
         if not user.is_manager:
             user_data_filling = UserDataFilling(message=message,
