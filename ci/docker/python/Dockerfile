@@ -5,6 +5,7 @@ ARG RUNNER
 
 ENV RUNNER $RUNNER
 ENV PYTHONUNBUFFERED 1
+ENV TZ="Europe/Moscow"
 
 COPY app/build/pip/ /var/app/build/pip/
 RUN cd /var/app/ && pip install -r "build/pip/${PIP_ENVIRONMENT}_requirements.txt"

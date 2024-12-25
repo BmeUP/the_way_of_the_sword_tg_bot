@@ -1,5 +1,6 @@
 from sqladmin.authentication import AuthenticationBackend
 from starlette.requests import Request
+from starlette.responses import RedirectResponse
 from fastapi import HTTPException, status
 import jwt
 
@@ -16,8 +17,8 @@ class AdminAuth(AuthenticationBackend):
 
         async with AsyncSessionLocal() as session:
             user_repo = UserRepository(session)
-            user = await user_repo.get_object_by_params(username=username)
-
+            user = await user_repo.get_one_or_none_by_params(username=username)
+            print(user)
         if not user:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
@@ -43,6 +44,9 @@ class AdminAuth(AuthenticationBackend):
             if jwt_service.validate_token(access):
                 return True
         except jwt.exceptions.ExpiredSignatureError:
-            refresh = request.session.get("refresh")
-            request.session.update(jwt_service.refresh_tokens(refresh))
-            return True
+            try:
+                refresh = request.session.get("refresh")
+                request.session.update(jwt_service.refresh_tokens(refresh))
+                return True
+            except jwt.exceptions.ExpiredSignatureError:
+                return RedirectResponse(url="/admin/login")

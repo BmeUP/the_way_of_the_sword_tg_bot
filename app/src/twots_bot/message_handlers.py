@@ -1,5 +1,5 @@
-from aiogram import Router
-from aiogram.types import Message
+from aiogram import Router, F
+from aiogram.types import Message, CallbackQuery
 from aiogram.filters import CommandStart
 
 from config.db import get_local_session
@@ -41,3 +41,8 @@ async def echo(message: Message):
         message_repo = MessageRepository(session=session)
         message_repo.add_to_the_session(data=DBMessage(text=message.text))
         await message_repo.persist()
+
+
+@twots_aiogram_router.callback_query(F.data == "get_qr")
+async def get_qr(call: CallbackQuery):
+    await call.message.answer("qr")

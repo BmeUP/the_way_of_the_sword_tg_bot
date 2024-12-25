@@ -1,5 +1,5 @@
 services:
-  processing-backend:
+  the_way_of_the_sword-backend:
     build:
       args:
         PIP_ENVIRONMENT: dev

@@ -4,8 +4,17 @@ up-d:
 up-d-build:
 	cd ci/docker; docker compose up -d --build --remove-orphans
 
+down:
+	cd ci/docker; docker compose down
+
 build-scheduler-worker:
 	cd ci/docker; docker compose up -d --build --remove-orphans the_way_of_the_sword-taskiq-scheduler the_way_of_the_sword-taskiq-worker
+
+set-webhook:
+	cd ci/docker; docker compose exec the_way_of_the_sword-backend python set_webhook.py bash
+
+create-admin:
+	cd ci/docker; docker compose exec the_way_of_the_sword-backend python create_admin.py bash
 
 logsf-backend:
 	cd ci/docker; docker compose logs -f the_way_of_the_sword-backend
