@@ -33,7 +33,6 @@ services:
     - "db_data:/var/lib/postgresql/data"
     command: ["postgres", "-c", "max_connections=1000"]
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U p"]
       interval: 10s
       timeout: 5s
       retries: 5

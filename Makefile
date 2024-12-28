@@ -28,6 +28,9 @@ logsf-scheduler:
 logsf-worker:
 	cd ci/docker; docker compose logs -f the_way_of_the_sword-taskiq-worker
 
+logsf-db:
+	cd ci/docker; docker compose logs -f the_way_of_the_sword-db
+
 exec-mq:
 	cd ci/docker; docker compose exec the_way_of_the_sword-mq bash
 

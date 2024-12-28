@@ -12,6 +12,7 @@ from twots_bot.message_handlers import twots_aiogram_router
 from admin_panel.user_view import UserAdmin
 from admin_panel.authentication import AdminAuth
 from admin_panel.message_view import MessageAdmin
+from admin_panel.qr_data_view import QRDataAdmin
 
 
 @asynccontextmanager
@@ -30,6 +31,7 @@ admin = Admin(app, async_engine, authentication_backend=AdminAuth(secret_key=set
 
 admin.add_view(UserAdmin)
 admin.add_view(MessageAdmin)
+admin.add_view(QRDataAdmin)
 
 app.include_router(twtos_bot_router)
 dp.include_routers(twots_aiogram_router)
