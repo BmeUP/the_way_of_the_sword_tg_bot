@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery, BufferedInputFile
 from aiogram.filters import CommandStart
@@ -41,17 +43,22 @@ async def echo(message: Message):
             await user_data_filling.fill_data()
             return
 
+        text = message.text
+
         file = await bot.get_file(message.photo[-1].file_id)
-        downloaded_file = await bot.download_file(file_path=file.file_path, destination=f"media/random_name.{file.file_path.split(".")[-1]}")
 
-        print(downloaded_file)
-        # file = await bot.download(message.photo[-1].file_id, destination="files/")
+        if file and not message.caption:
+            await message.answer(text="Нельзя сохранить файл без описания.")
+            return
 
-        # print("FILE")
-        # print(file)
+        if file:
+            text = message.caption
+
+        file_name = f"{str(uuid4())}.{file.file_path.split(".")[-1]}"
+        await bot.download_file(file_path=file.file_path, destination=f"media/{file_name}")
 
         message_repo = MessageRepository(session=session)
-        message_repo.add_to_the_session(data=DBMessage(text=message.text))
+        message_repo.add_to_the_session(data=DBMessage(text=text, file_path=f"media/{file_name}"))
         await message_repo.persist()
 
 
