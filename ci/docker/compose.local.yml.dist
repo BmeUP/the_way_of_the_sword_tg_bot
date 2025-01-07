@@ -4,3 +4,9 @@ services:
       args:
         PIP_ENVIRONMENT: dev
         RUNNER: dev
+    ports:
+      - "8066:8000"
+
+  the_way_of_the_sword-db:
+    ports:
+      - "25433:5432"

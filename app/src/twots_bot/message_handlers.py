@@ -1,5 +1,3 @@
-from uuid import uuid4
-
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery, BufferedInputFile
 from aiogram.filters import CommandStart
@@ -13,7 +11,7 @@ from twots_bot.models.repositories.message_repository import MessageRepository
 from twots_bot.models.orm.message import Message as DBMessage
 from twots_bot.services.user_qr import UserQR
 from twots_bot.models.repositories.qr_data_repository import QRDataRepository
-from twots_bot.config import bot
+from twots_bot.services.downloads import DownloadMedia
 
 
 twots_aiogram_router = Router()
@@ -43,23 +41,14 @@ async def echo(message: Message):
             await user_data_filling.fill_data()
             return
 
-        text = message.text
-
-        file = await bot.get_file(message.photo[-1].file_id)
-
-        if file and not message.caption:
-            await message.answer(text="Нельзя сохранить файл без описания.")
-            return
-
-        if file:
-            text = message.caption
-
-        file_name = f"{str(uuid4())}.{file.file_path.split(".")[-1]}"
-        await bot.download_file(file_path=file.file_path, destination=f"media/{file_name}")
+        download_media = DownloadMedia(message=message)
+        text, file_path = await download_media.download_media()
 
         message_repo = MessageRepository(session=session)
-        message_repo.add_to_the_session(data=DBMessage(text=text, file_path=f"media/{file_name}"))
+        message_repo.add_to_the_session(data=DBMessage(text=text, file_path=file_path))
         await message_repo.persist()
+
+        await message.answer("Сообщение сохранено. Закончите его настройку в админ панели.")
 
 
 @twots_aiogram_router.callback_query(F.data == "get_qr")

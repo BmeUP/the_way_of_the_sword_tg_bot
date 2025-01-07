@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     webhook_domain: str
     bot_token: str
     salt: str
+    admin_username: str
+    admin_password: str
 
 
 settings = Settings()
